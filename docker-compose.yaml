@@ -1,0 +1,32 @@
+# Network
+networks:
+  default:
+    name: fspm-bnw
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/16
+          ip_range: 172.22.0.0/16
+          gateway: 172.22.0.1
+
+# Services
+services:
+  flask_gunicorn_service:
+    container_name: flask_gunicorn_service
+    build:
+      context: ./flask_gunicorn_service
+    networks:
+      default:
+        ipv4_address: 172.22.0.4
+    ports:
+      - 4001:4001
+      - 9200:9200
+    volumes:
+      - ./flask_gunicorn_service:/app
+  prometheus:
+    container_name: prometheus
+    image: "prom/prometheus"
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
