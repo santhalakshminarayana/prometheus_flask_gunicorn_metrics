@@ -34,6 +34,11 @@ In `/app/metrics/flask_prometheus_metrics.py` file, add the custom metrics in th
 
 In the `/app/app.py`, the `FlaskPrometheusMetrics` is initilized at the end of the all endpoints definition, if not then the custom metrics don't track these endpoints.
 
+### Scrapping metrics by Monitor server
+Instead of Prometheus directly gathering metrics, if there is a monitor server that scraps the metrics for each service periodically, expose an API which exports all Gunicorn processes metrics stored.
+
+When monitor server hits this API (ex: http://$svc-url/metrics), the request is sent to any of the processes and that process in-turn hits the **http://localhost:9200** port and gathers the metrics and returns.
+
 #### Ref:
 - [https://www.metricfire.com/blog/monitoring-python-web-app/](https://www.metricfire.com/blog/monitoring-python-web-app/)
 - [https://www.cloudbees.com/blog/monitoring-your-synchronous-python-web-applications-using-prometheus](https://www.cloudbees.com/blog/monitoring-your-synchronous-python-web-applications-using-prometheus)
